@@ -1,6 +1,11 @@
 [package]
-name = "hyper_bootstrap"
+name = "routing_example"
 version = "0.1.0"
 authors = ["Nicholas Dujay <nickdujay@gmail.com>"]
 
 [dependencies]
+error-chain = "0.11"
+futures = "0.1.14"
+hyper = "0.11"
+routing = { git = "https://github.com/dat2/routing" }
+routing-derive = { git = "https://github.com/dat2/routing" }
