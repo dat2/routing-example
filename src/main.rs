@@ -35,7 +35,13 @@ enum Routes {
   #[post("/users/:id")]
   CreateUser {
     id: usize
-  }
+  },
+
+  #[get("/users/:user_id/friends/:friend_id")]
+  GetUserFriend {
+    user_id: usize,
+    friend_id: usize
+  },
 }
 
 struct Example;
@@ -51,10 +57,15 @@ impl Service for Example {
 
   fn call(&self, req: Request) -> Self::Future {
 
-    let response = match Routes::routing_table().route(&req) {
+    let route = Routes::routing_table().route(&req);
+
+    println!("{:?}", route);
+
+    let response = match route {
       Some(Routes::Index) => Response::new().with_body("Hello World!"),
       Some(Routes::Echo) => Response::new().with_body(req.body()),
       Some(Routes::CreateUser { id }) => Response::new().with_body(format!("Created user with id {}", id)),
+      Some(Routes::GetUserFriend { user_id, friend_id }) => Response::new().with_body(format!("User {} is friends with {}", user_id, friend_id)),
       None => Response::new().with_status(StatusCode::NotFound)
     };
 
