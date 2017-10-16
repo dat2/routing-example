@@ -4,6 +4,7 @@
 extern crate error_chain;
 extern crate futures;
 extern crate hyper;
+extern crate regex;
 extern crate routing;
 #[macro_use]
 extern crate routing_derive;
@@ -11,7 +12,7 @@ extern crate routing_derive;
 use futures::future::{self, Future};
 use hyper::StatusCode;
 use hyper::server::{Http, Request, Response, Service};
-use routing::RoutingTable;
+use routing::{NewRoutingTable, RoutingTable};
 
 mod errors {
   error_chain! {
@@ -29,7 +30,12 @@ enum Routes {
   Index,
 
   #[post("/echo")]
-  Echo
+  Echo,
+
+  #[post("/users/:id")]
+  CreateUser {
+    id: usize
+  }
 }
 
 struct Example;
@@ -45,9 +51,10 @@ impl Service for Example {
 
   fn call(&self, req: Request) -> Self::Future {
 
-    let response = match Routes::route(&req) {
+    let response = match Routes::routing_table().route(&req) {
       Some(Routes::Index) => Response::new().with_body("Hello World!"),
       Some(Routes::Echo) => Response::new().with_body(req.body()),
+      Some(Routes::CreateUser { id }) => Response::new().with_body(format!("Created user with id {}", id)),
       None => Response::new().with_status(StatusCode::NotFound)
     };
 

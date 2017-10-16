@@ -7,5 +7,8 @@ authors = ["Nicholas Dujay <nickdujay@gmail.com>"]
 error-chain = "0.11"
 futures = "0.1.14"
 hyper = "0.11"
+regex = "0.2"
 routing = { git = "https://github.com/dat2/routing" }
 routing-derive = { git = "https://github.com/dat2/routing" }
+# routing = { path = "../routing" }
+# routing-derive = { path = "../routing/routing-derive" }
